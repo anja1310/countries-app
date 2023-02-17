@@ -4,6 +4,13 @@ import { Link, useParams } from "react-router-dom";
 export default function SingleCountry() {
     const [country, setCountry] = useState([]);
     const {name} = useParams()
+    const currencies = (x) =>
+    Object.keys(x.currencies).map((e) => x.currencies[e].name);
+    const languages = (x) =>
+    Object.keys(x.languages).map((e) => x.languages[e]);
+    const nativeName = (x) => 
+    Object.keys(x.name.nativeName).map((e) => x.name.nativeName[e].official);
+    
 
     useEffect(() => {
         const getSingleCountry = async() => {
@@ -27,21 +34,35 @@ export default function SingleCountry() {
     return <>
         <section className="p-8 md:py-0 max-w-7xl mx-auto">
             {country.map((item) => (
-                <div key={item.population} className="grid grid-cols-1 gap-8 md:grid-cols-2 md:place-items-center md:h-screen">
-                    <article>
-                        <img src={item.flags.svg} alt={item.name.common} />
-                    </article>
+                <div key={item.population} className="grid grid-cols-1 gap-8 md:grid-cols-3 md:place-items-center md:h-screen">
 
                     <article>
-                        <h1 className="mb-8 font-bold text-gray-900 dark:text-white text-4xl lg:text-6xl">
+
+                        <Link to="/" className="inline-block mb-8 bg-white py-2 px-6 rounded shadow
+                            text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:hover:bg-gray-700
+                            dark:text-gray-400">
+                            &larr; Back
+                        </Link>
+
+                        <img src={item.flags.svg} alt={item.name.common} />
+
+                    </article>
+
+
+                    <article className="col-start-2">
+
+                        <h1 className="col-span-2 inline mb-8 font-bold text-gray-900 dark:text-white text-4xl lg:text-6xl">
                             {item.name.official}
                         </h1>
+                                              
                         <ul className="my-4 flex flex-col items-start justify-start gap-2
-                        text-slate-700 dark:text-gray-400">
-                            <li>Capital: {item.capital[0]}</li>
-                            <li>Population: {item.population.toLocaleString()}</li>
-                            <li>Region: {item.region}</li>
-                            <li>Subregion: {item.subregion}</li>
+                        text-slate-700 font-bold dark:text-gray-400">
+                            <li>Native Name: <p className="font-thin inline">{nativeName(item)}</p></li>
+                            <li>Population: <p className="font-thin inline">{item.population.toLocaleString()}</p></li>
+                            <li>Region: <p className="font-thin inline">{item.region}</p></li>
+                            <li>Sub Region: <p className="font-thin inline">{item.subregion}</p></li>
+                            <li>Capital: <p className="font-thin inline">{item.capital[0]}</p></li>
+                            
                         </ul>
 
                         {item.borders && (
@@ -58,11 +79,14 @@ export default function SingleCountry() {
                             </>
                         )}
 
-                        <Link to="/" className="inline-block mt-8 bg-white py-2 px-6 rounded shadow
-                        text-gray-700 hover:bg-gray-200 transition-all duration-200 dark:bg-gray-800 dark:hover:bg-gray-700
-                        dark:text-gray-400">
-                            &larr; Back
-                        </Link>
+                    </article>
+                    <article>
+                        <ul className="my-4 flex flex-col items-start justify-start gap-2
+                        text-slate-700 font-bold dark:text-gray-400">
+                            <li>Top Level Domain: <p className="font-thin inline">{item.tld[0]}</p></li>
+                            <li>Currencies: <p className="font-thin inline">{currencies(item)}</p></li>
+                            <li>Languages: <p className="font-thin inline">{languages(item)}</p></li>
+                        </ul>
                     </article>
                 </div>
             ))}
